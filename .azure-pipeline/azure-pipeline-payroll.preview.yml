@@ -1,0 +1,35 @@
+trigger:
+  paths:
+    include:
+    - applications/payroll.webapp
+
+pr: none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+
+steps:
+- task: vercel-deployment-task@1
+  name: 'Deploy'
+  inputs:
+    condition: or(eq(variables.isMain, true), eq(variables['Build.Reason'], 'PullRequest'))
+    vercelProjectId: $(VERCEL_PROJECT_ID)
+    vercelOrgId: $(VERCEL_ORG_ID)
+    vercelToken: $(VERCEL_TOKEN)
+    production: $(isMain)
+
+- task: Bash@3
+  displayName: 'Send Whatsapp Notification'
+  inputs:
+    targetType: 'inline'
+    script: |
+     curl --location 'https://whatsapp-rad.azurewebsites.net/send/message' \
+      --header 'Authorization: Bearer Basic cmFkeWFsYWJzOnBhc3N3b3Jkc3VsaXQ=' \
+      --form 'phone="120363164970269189"' \
+      --form 'message="$(Deploy.deploymentTaskMessage)
+      
+      Changes:
+      $(Build.SourceVersionMessage)"'

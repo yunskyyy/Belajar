@@ -1,0 +1,43 @@
+
+
+.container {
+  @apply w-fit h-fit font-sans;
+
+  &.disabled {
+    @apply bg-gray-100 pointer-events-none cursor-not-allowed ;
+  }
+
+  &.block {
+    @apply w-full;
+  }
+}
+
+.textfield {
+  @apply text-gray-900 text-base rounded-xl px-3.5 py-4 w-fit font-sans box-border
+  border border-solid border-neutral-300;
+
+  &.borderSuccess {
+    @apply border-success-500;
+  }
+
+  &.borderError {
+    @apply border-danger-500;
+  }
+
+  &.rounded {
+    @apply rounded-full;
+  }
+
+  &:focus-visible {
+    outline: 0;
+  }
+
+  &.disabled {
+    @apply bg-gray-100;
+  }
+
+  &.block {
+    @apply w-full;
+  }
+
+}
